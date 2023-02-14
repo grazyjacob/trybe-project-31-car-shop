@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import ICar from '../Interfaces/ICar';
 import CarsService from '../Services/CarsService';
 
-export default class CarsPostController {
+export default class CarsController {
   private req: Request;
   private res: Response;
   private next: NextFunction;
@@ -30,6 +30,22 @@ export default class CarsPostController {
       return this.res.status(201).json(newCar);
     } catch (error) {
       this.next(error);
+    }
+  }
+
+  public async findAll() {
+    const allCars = await this.service.getAllCars();
+    return this.res.status(200).json(allCars);
+  }
+
+  public async findOne() {
+    const carId = this.req.params.id;
+    try {
+      const car = await this.service.getOneCar(carId);
+      if (!car) return this.res.status(404).json({ message: 'Car not found' });
+      return this.res.status(200).json(car);
+    } catch (error) {
+      this.res.status(422).json({ message: 'Invalid mongo id' });
     }
   }
 }

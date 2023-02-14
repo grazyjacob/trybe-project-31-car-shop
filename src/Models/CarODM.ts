@@ -5,6 +5,7 @@ import {
   models,
 } from 'mongoose';
 import ICar from '../Interfaces/ICar';
+// import IMyDocument from '../Interfaces/IMyDocument';
   
 class CarODM {
   private schema: Schema;
@@ -25,6 +26,16 @@ class CarODM {
   
   public async create(car: ICar): Promise<ICar> {
     return this.model.create({ ...car });
+  }
+
+  public async findAll() {
+    const response = this.model.find();
+    return response;
+  }
+
+  public async getOne(id: string) {
+    const car = this.model.findById(id);
+    return car;
   }
 }
   
