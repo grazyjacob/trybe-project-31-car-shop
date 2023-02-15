@@ -5,7 +5,6 @@ import {
   models,
 } from 'mongoose';
 import ICar from '../Interfaces/ICar';
-// import IMyDocument from '../Interfaces/IMyDocument';
   
 class CarODM {
   private schema: Schema;

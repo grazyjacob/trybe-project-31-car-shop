@@ -1,14 +1,12 @@
-import ICar from '../Interfaces/ICar';
+import IVehicle from '../Interfaces/IVehicle';
 
-class Car implements Car { 
+class Vehicle {
   protected id?: string | undefined;
   protected model: string;
   protected year: number;
   protected color: string;
   protected status?: boolean;
   protected buyValue: number;
-  private doorsQty: number;
-  private seatsQty: number;
 
   constructor({
     status,
@@ -17,17 +15,13 @@ class Car implements Car {
     year,
     color,
     buyValue,
-    doorsQty,
-    seatsQty,
-  }: ICar) {
+  }: IVehicle) {
     this.id = id;
     this.status = status;
     this.model = model;
     this.year = year;
     this.color = color;
     this.buyValue = buyValue;
-    this.doorsQty = doorsQty;
-    this.seatsQty = seatsQty;
   }
   public getId(): string | undefined {
     return this.id;
@@ -41,6 +35,7 @@ class Car implements Car {
   public setModel(value: string) {
     this.model = value;
   }
+
   public getYear(): number {
     return this.year;
   }
@@ -65,12 +60,6 @@ class Car implements Car {
   public setBuyValue(value: number) {
     this.buyValue = value;
   }
-  public getDoorsQty(): number {
-    return this.doorsQty;
-  }
-  public getSeatsQty(): number {
-    return this.seatsQty;
-  }
 }
 
-export default Car;
+export default Vehicle;
