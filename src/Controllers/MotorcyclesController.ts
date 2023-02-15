@@ -2,8 +2,8 @@ import { NextFunction, Request, Response } from 'express';
 import IMotorcycle from '../Interfaces/IMotorcycle';
 import MotorcycleService from '../Services/MotorcycleService';
 
-// const CAR_NOT_FOUND = 'Car not found';
-// const INVALID_MONGO_ID = 'Invalid mongo id';
+const MOTORCYCLE_NOT_FOUND = 'Motorcycle not found';
+const INVALID_MONGO_ID = 'Invalid mongo id';
 
 export default class MotorcyclesController {
   private req: Request;
@@ -33,6 +33,22 @@ export default class MotorcyclesController {
       return this.res.status(201).json(newMotorcycle);
     } catch (error) {
       this.next(error);
+    }
+  }
+
+  public async findAll() {
+    const allMotorcycles = await this.service.getAllMotorcycles();
+    return this.res.status(200).json(allMotorcycles);
+  }
+
+  public async findOne() {
+    const motorcycleId = this.req.params.id;
+    try {
+      const motorcycle = await this.service.getOneMotorcycle(motorcycleId);
+      if (!motorcycle) return this.res.status(404).json({ message: MOTORCYCLE_NOT_FOUND });
+      this.res.status(200).json(motorcycle);
+    } catch (error) {
+      this.res.status(422).json({ message: INVALID_MONGO_ID });
     }
   }
 }

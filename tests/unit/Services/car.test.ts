@@ -41,6 +41,25 @@ describe('Deveria adicionar um carro', function () {
     expect(result).to.be.deep.equal(carOutput);
     sinon.restore();
   });
+  it('Verifica se ao mandar um body invalido retorna null', async function () {
+    const carInput: ICar = {
+      model: '',
+      year: 1956,
+      color: 'Gray',
+      status: true,
+      buyValue: 154.990,
+      doorsQty: 2,
+      seatsQty: 2,
+    };
+    const carOutput = null;
+    sinon.stub(Model, 'create').resolves(carOutput);
+
+    const service = new CarService();
+    const result = await service.create(carInput);
+
+    expect(result).to.be.deep.equal(carOutput);
+    sinon.restore();
+  });
   it('Buscando um carro pelo ID com SUCESSO', async function () {
     const carOutput: Car = new Car(
       {
