@@ -31,4 +31,15 @@ export default class MotorcyclesService {
     const createDom = this.createNewMotorcycle(motorcycle);
     return createDom;
   }
+
+  public async updateMotorcycle(id: string, update: IMotorcicle) {
+    const motorcycleODM = new MotorcycleODM();
+    const result = await motorcycleODM.updateMotorcycle(id, update);
+    const motorcycle = { id, ...update };
+    if (result) {
+      const createDom = this.createNewMotorcycle(motorcycle);
+      return createDom;
+    }
+    return result;
+  }
 }

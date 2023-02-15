@@ -51,4 +51,25 @@ export default class MotorcyclesController {
       this.res.status(422).json({ message: INVALID_MONGO_ID });
     }
   }
+
+  public async updateOne() {
+    const motorcycle: IMotorcycle = {
+      model: this.req.body.model,
+      year: this.req.body.year,
+      color: this.req.body.color,
+      buyValue: this.req.body.buyValue,
+      status: this.req.body.status || false,
+      category: this.req.body.category,
+      engineCapacity: this.req.body.engineCapacity,
+    };
+    const motorcycleId = this.req.params.id;
+
+    try {
+      const result = await this.service.updateMotorcycle(motorcycleId, motorcycle);
+      if (!result) return this.res.status(404).json({ message: MOTORCYCLE_NOT_FOUND });
+      return this.res.status(200).json(result);
+    } catch (error) {
+      this.res.status(422).json({ message: INVALID_MONGO_ID });
+    }
+  }
 }

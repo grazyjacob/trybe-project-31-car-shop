@@ -34,6 +34,10 @@ class MotorcycleODM {
   public async getOne(id: string) {
     return this.model.findById(id);
   }
+
+  public async updateMotorcycle(id:string, update: IMotorcycle) {
+    return this.model.findByIdAndUpdate(id, update);
+  }
 }
     
 export default MotorcycleODM;
