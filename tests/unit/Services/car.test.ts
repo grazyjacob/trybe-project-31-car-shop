@@ -10,7 +10,7 @@ const ERROR_INVALID_ID = 'Invalid mongo id';
 const GOOD_CAR_ID = '63ebddeccb2b1922cffc2852';
 const BAD_CAR_ID = '63ebddeccb2b1922cffc28XX';
 
-describe('Deveria adicionar um carro', function () {
+describe('Rota cars', function () {
   it('Criando um carro com SUCESSO', async function () {
     const carInput: ICar = {
       model: 'Bugatti',
@@ -100,6 +100,93 @@ describe('Deveria adicionar um carro', function () {
       await service.getOneCar('');
     } catch (error) {
       expect((error as Error).message).to.be.equal(ERROR_INVALID_ID);
+    }
+    sinon.restore();
+  });
+  it('Buscando todos os carros com SUCESSO', async function () {
+    const carOutput = [
+      {
+        id: GOOD_CAR_ID,
+        status: true,
+        model: 'Ferrari',
+        year: 2011,
+        color: 'Red',
+        buyValue: 300.999,
+        doorsQty: 2,
+        seatsQty: 2,
+      },
+    ];
+
+    const carResponse = [
+      new Car({
+        id: GOOD_CAR_ID,
+        status: true,
+        model: 'Ferrari',
+        year: 2011,
+        color: 'Red',
+        buyValue: 300.999,
+        doorsQty: 2,
+        seatsQty: 2,
+      }),
+    ];
+
+    sinon.stub(Model, 'find').resolves(carOutput);
+    const service = new CarService();
+    const result = await service.getAllCars();
+  
+    await service.getAllCars();
+    expect(result).to.be.deep.equal(carResponse);
+    sinon.restore();
+  });
+  it('Alterando um carro pelo ID com SUCESSO', async function () {
+    const carOutput: Car = new Car(
+      {
+        id: GOOD_CAR_ID,
+        status: true,
+        model: 'Lamborguini',
+        year: 1956,
+        color: 'Gray',
+        buyValue: 154.99,
+        doorsQty: 2,
+        seatsQty: 2,
+      },
+    );
+    const update = {
+      id: GOOD_CAR_ID,
+      status: true,
+      model: 'Lamborguini',
+      year: 1956,
+      color: 'Gray',
+      buyValue: 154.99,
+      doorsQty: 2,
+      seatsQty: 2,
+    };
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(carOutput);
+  
+    const service = new CarService();
+    const result = await service.updateCar(GOOD_CAR_ID, update);
+  
+    expect(result).to.be.deep.equal(carOutput);
+    sinon.restore();
+  });
+  it('Alterando um carro pelo ID - ERRO', async function () {
+    const update = {
+      id: BAD_CAR_ID,
+      status: true,
+      model: 'Lamborguini',
+      year: 1956,
+      color: 'Gray',
+      buyValue: 154.99,
+      doorsQty: 2,
+      seatsQty: 2,
+    };
+    sinon.stub(Model, 'findByIdAndUpdate').resolves();
+  
+    try {
+      const service = new CarService();
+      await service.updateCar(BAD_CAR_ID, update);
+    } catch (error) {
+      expect((error as Error).message).to.be.equal(ERROR_NOT_FOUND);
     }
     sinon.restore();
   });
